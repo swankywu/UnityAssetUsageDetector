@@ -156,7 +156,7 @@ namespace AssetUsageDetectorNamespace
 			SceneSetup[] initialSceneSetup = !isInPlayMode ? EditorSceneManager.GetSceneManagerSetup() : null;
 
 			// Make sure that the AssetDatabase is up-to-date
-			AssetDatabase.SaveAssets();
+			// AssetDatabase.SaveAssets();
 
 			try
 			{
