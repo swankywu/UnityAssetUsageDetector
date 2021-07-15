@@ -19,7 +19,7 @@ namespace AssetUsageDetectorNamespace
 {
 	[Flags]
 	public enum SceneSearchMode { None = 0, OpenScenes = 1, ScenesInBuildSettingsAll = 2, ScenesInBuildSettingsTickedOnly = 4, AllScenes = 8 };
-	public enum PathDrawingMode { Full = 0, ShortRelevantParts = 1, Shortest = 2 };
+	public enum PathDrawingMode { Full = 0, ShortRelevantParts = 1, Shortest = 2, Distinct = 3 };
 
 	public partial class AssetUsageDetector
 	{

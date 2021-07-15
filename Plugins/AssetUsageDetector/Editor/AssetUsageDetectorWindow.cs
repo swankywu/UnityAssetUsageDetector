@@ -634,6 +634,16 @@ namespace AssetUsageDetectorNamespace
 
 					GUILayout.EndHorizontal();
 
+					//--custom 
+					GUILayout.BeginHorizontal();
+
+					GUILayout.Space( 35 );
+
+					if( EditorGUILayout.ToggleLeft( "Distinct: Draw distinct asset used", searchResultDrawParameters.pathDrawingMode == PathDrawingMode.Distinct ) )
+						searchResultDrawParameters.pathDrawingMode = PathDrawingMode.Distinct;
+
+					GUILayout.EndHorizontal();
+
 					searchResult.DrawOnGUI( searchResultDrawParameters );
 				}
 			}

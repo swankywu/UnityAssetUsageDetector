@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -699,7 +700,7 @@ namespace AssetUsageDetectorNamespace
 
 			rect.x += 40f;
 			rect.width = width - ( parameters.searchResult != null ? 140f : 40f );
-			if( GUI.Button( rect, Title, Utilities.BoxGUIStyle ) && Type == GroupType.Scene )
+			if( GUI.Button( rect, $"{Title} ({this.guiNodes.Length})", Utilities.BoxGUIStyle ) && Type == GroupType.Scene )
 			{
 				if( Event.current.button != 1 )
 				{
@@ -793,8 +794,11 @@ namespace AssetUsageDetectorNamespace
 					List<ReferencePath> pathsToDraw;
 					if( parameters.pathDrawingMode == PathDrawingMode.ShortRelevantParts )
 						pathsToDraw = referencePathsShortUnique;
-					else
+					else if( parameters.pathDrawingMode == PathDrawingMode.Shortest )
 						pathsToDraw = referencePathsShortest;
+					else
+						pathsToDraw = referencePathsShortest.GroupBy(x=>x.startNode[x.startNode.NumberOfOutgoingLinks-1]
+							.targetNode.UnityObject).Select(y=>y.First()).ToList();
 
 					guiNodes = new ReferenceNodeGUI[pathsToDraw.Count];
 
@@ -803,13 +807,16 @@ namespace AssetUsageDetectorNamespace
 						ReferencePath path = pathsToDraw[i];
 						ReferenceNode currentNode = path.startNode;
 
-						ReferenceNodeGUI currentNodeGUI = currentNode.GenerateGUINode( null );
+						ReferenceNodeGUI currentNodeGUI = currentNode.GenerateGUINode( parameters.pathDrawingMode
+							 == PathDrawingMode.Distinct?AssetDatabase.GetAssetPath(currentNode.UnityObject):null );
 						guiNodes[i] = currentNodeGUI;
 
 						for( int j = 0; j < path.pathLinksToFollow.Length; j++ )
 						{
 							ReferenceNode.Link link = currentNode[path.pathLinksToFollow[j]];
-							currentNodeGUI.links = new ReferenceNodeGUI[1] { link.targetNode.GenerateGUINode( link.description ) };
+							currentNodeGUI.links = new ReferenceNodeGUI[1] { link.targetNode.GenerateGUINode( 
+								parameters.pathDrawingMode == PathDrawingMode.Distinct ? 
+								AssetDatabase.GetAssetPath(link.targetNode.UnityObject) : link.description) };
 
 							currentNode = link.targetNode;
 							currentNodeGUI = currentNodeGUI.links[0];
