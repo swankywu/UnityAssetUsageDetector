@@ -700,7 +700,7 @@ namespace AssetUsageDetectorNamespace
 
 			rect.x += 40f;
 			rect.width = width - ( parameters.searchResult != null ? 140f : 40f );
-			if( GUI.Button( rect, $"{Title} ({this.guiNodes.Length})", Utilities.BoxGUIStyle ) && Type == GroupType.Scene )
+			if( GUI.Button( rect, $"{Title} ({this?.guiNodes?.Length})", Utilities.BoxGUIStyle ) && Type == GroupType.Scene )
 			{
 				if( Event.current.button != 1 )
 				{
